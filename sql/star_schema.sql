@@ -1,5 +1,5 @@
 CREATE TABLE "DimTime" (
-    "TimeID" SERIAL PRIMARY KEY,
+    "TimeID" UUID PRIMARY KEY,
     "Date" DATE NOT NULL,
     "Month" INTEGER NOT NULL,
     "Quarter" INTEGER NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE "DimGeography" (
 
 CREATE TABLE "DimProduct" (
     "StockCode" VARCHAR(255) PRIMARY KEY,
-    "Description" TEXT NOT NULL,
+    "Description" TEXT,
     "Category" VARCHAR(255)
 );
 
@@ -33,7 +33,7 @@ CREATE TABLE "FactSales" (
     "SalesID" SERIAL PRIMARY KEY,
     "InvoiceNo" INTEGER NOT NULL,
     "StockCode" VARCHAR(255) NOT NULL,
-    "TimeID" INTEGER NOT NULL,
+    "TimeID" UUID NOT NULL,
     "CustomerID" INTEGER NOT NULL,
     "Quantity" BIGINT NOT NULL,
     "UnitPrice" NUMERIC NOT NULL,
