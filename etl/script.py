@@ -1,15 +1,18 @@
 import pandas as pd
 from sqlalchemy import create_engine
 from datetime import datetime
+from dotenv import load_dotenv 
+import os
+load_dotenv()
 
-# Replace these with your actual database connection details
-DATABASE_TYPE = 'postgresql'
-DBAPI = 'psycopg2'
-HOST = 'your_host'  # localhost or your database server IP
-USER = 'your_user'
-PASSWORD = 'your_password'
-DATABASE = 'your_database'
-PORT = 5432
+# --- Connect to the Database ---
+DATABASE_TYPE = os.getenv('DATABASE_TYPE')
+DBAPI = os.getenv('DBAPI')
+HOST = os.getenv('HOST')
+USER = os.getenv('USER')
+PASSWORD = os.getenv('PASSWORD')
+DATABASE = os.getenv('DATABASE')
+PORT = os.getenv('PORT')
 
 # Create the database engine
 engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
