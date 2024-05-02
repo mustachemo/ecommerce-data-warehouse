@@ -2,6 +2,7 @@
 *.css.map
 *.sass.map
 *.scss.map
+data.sqlite
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
