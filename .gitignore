@@ -3,6 +3,7 @@
 *.sass.map
 *.scss.map
 data.sqlite
+olist.sqlite
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
