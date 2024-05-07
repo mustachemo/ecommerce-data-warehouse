@@ -1,23 +1,44 @@
-from dash import Dash, html, dcc, callback, Output, Input
-import plotly.express as px
+import dash
 import pandas as pd
+import sqlite3
+from dash import dcc, html
+from dash.dependencies import Input, Output
+from dash import dash_table
 
-df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
+# Create a Dash application
+app = dash.Dash(__name__)
 
-app = Dash(__name__)
+# Connect to the SQLite database
+conn = sqlite3.connect('./data/olist.sqlite')
+# Retrieve all table names
+res = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
+table_names = [name[0] for name in res.fetchall()]
+conn.close()
 
+# App layout
 app.layout = html.Div([
-    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
-    dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'),
-    dcc.Graph(id='graph-content')
+    dcc.Dropdown(
+        id='table-dropdown',
+        options=[{'label': name, 'value': name} for name in table_names],
+        value=table_names[0]  # Default value
+    ),
+    html.Div(id='table-container')
 ])
 
-@callback(
-    Output('graph-content', 'figure'),
-    Input('dropdown-selection', 'value')
+# Callback to update the data table based on selected table name
+@app.callback(
+    Output('table-container', 'children'),
+    Input('table-dropdown', 'value')
 )
-def update_graph(value):
-    dff = df[df.country==value]
-    return px.line(dff, x='year', y='pop')
+def update_table(selected_table):
+    conn = sqlite3.connect('your_database_file.sqlite')
+    df = pd.read_sql_query(f"SELECT * FROM {selected_table}", conn)
+    conn.close()
+    return dash_table.DataTable(
+        data=df.to_dict('records'),
+        columns=[{'name': col, 'id': col} for col in df.columns]
+    )
 
+# Run the app
 if __name__ == '__main__':
+    app.run(debug=True)
